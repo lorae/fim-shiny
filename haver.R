@@ -1,3 +1,24 @@
+#' @title FUNCTION_TITLE
+#' @description Wrapper function to pull data from Haver Analytics.
+#' @param series names of variables to pull
+#' @param database name of database. FIM uses USNA and USECON
+#' @param start.date PARAM_DESCRIPTION, Default: '1970-01-01'
+#' @param frequency PARAM_DESCRIPTION, Default: 'quarterly'
+
+pull_data <- function(series, 
+                      database, 
+                      start.date = '1970-01-01', 
+                      frequency = "quarterly") {
+  q <- haver.data(series, 
+                  database, 
+                  eop.dates = T, 
+                  start = as.Date(start.date, f = "%m-%d-%Y"))
+  q <- data.frame(date = as.Date(rownames(q)), q)
+
+}
+
+
+
 # 0.0 Source ----------------------------------------------------------------------------------------------------------
 ## Source custom  functions and packages
 Sys.setenv(TZ = 'UTC')
