@@ -34,3 +34,6 @@ mpc <- function (x, # A vector of cash disbursement data
                  min_obs = 1) }
 
 mpc(data$disburse1, mpc$disburse1)
+
+
+# Ok now we have a proof of concept. How do we compare to previous runs?
