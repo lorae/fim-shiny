@@ -6,6 +6,8 @@
 
 library(magrittr)
 
+path <- secret_file[2]
+
 # Let's start by initializing some mock data and performing MPC calculations on it.
 
 data <- data.frame(
