@@ -19,6 +19,9 @@ This is what I envision.
 - it will identify the 6 types of changes above (e.g. change in forecast and data revisision etc) group them together by type. E.g. there could be multiple changes in forecast
 - explain how each of those have changed the fim.
 
+--- data ---
+A main spreadsheet (or CSV, or something) that contains forecasts, MPCs, and deflators. 
+--- extra ---
 3. A google drive folder with every name and date of a run on it. These will title individual folders. Saved within each folder are:
 - the forecast,mpc, and deflator sheets used in the run.
 - a dashboard showing the fim contributions (or should that not be saved and instead separately calculted?)
