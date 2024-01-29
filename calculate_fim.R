@@ -14,7 +14,7 @@ library("readxl") # read Excel sheets
 library("zoo") # handle year-quarter data
 library("magrittr") # use pipe operator %>%
 
-setwd("YOUR WD HERE")
+setwd(WD_PATH) # WD_PATH is specified in .env and loaded in init.R
 
 ##### 1: LOAD DATA #####
 ## Load historical data, predictions, and MPCs
