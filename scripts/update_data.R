@@ -20,15 +20,19 @@ library("purrr") # Functional programming tools for working with lists
 setwd(WD_PATH) # WD_PATH is specified in .env and loaded in init.R
 
 ##### 1: LOAD DATA #####
+## ATTENTIOPN!!!!
+## NEED TO RENAME BASED ON NEW mock-data.xtsx
+## ATTENTIOPN!!!!
 ## Load historical data, predictions, and MPCs
 # TODO: I may want to combine these three sheets into one workbook later
-historical <- read_xlsx(path = "mock-historical.xlsx", sheet = "data")
-forecast <- read_xlsx(path = "mock-forecast.xlsx", sheet = "data")
-mpc <- read_xlsx(path = "mock-forecast.xlsx", sheet = "mpc")
+# historical <- read_xlsx(path = "mock-data.xlsx", sheet = "data")
+# forecast <- read_xlsx(path = "mock-data.xlsx", sheet = "data")
+# mpc <- read_xlsx(path = "mock-data.xlsx", sheet = "mpc")
+
 
 # current quarter is the last column name of historical
-current_quarter <- tail(names(historical), 1) %>%
-  as.yearqtr(., format = "%Y Q%q")
+# current_quarter <- tail(names(historical), 1) %>%
+#   as.yearqtr(., format = "%Y Q%q")
 
 ##### 2: NEUTRAL COUNTERFACTUAL ##### 
 # Make API request to FRED to get real potential GDP time series. For more information
