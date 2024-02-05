@@ -30,7 +30,7 @@ mpc <- read_xlsx(path = "mock-forecast.xlsx", sheet = "mpc")
 current_quarter <- tail(names(historical), 1) %>%
   as.yearqtr(., format = "%Y Q%q")
 
-##### 2: MINUS NEUTRAL ##### 
+##### 2: NEUTRAL COUNTERFACTUAL ##### 
 # Make API request to FRED to get real potential GDP time series. For more information
 # on the API request, visit https://fred.stlouisfed.org/docs/api/fred/series_observations.html
 # For more information on the time series, visit https://fred.stlouisfed.org/series/GDPPOT
