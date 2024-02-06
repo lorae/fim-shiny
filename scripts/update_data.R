@@ -70,6 +70,34 @@ new_potgdp <- map_dfr(response$observations, ~ data.frame(
     as.yearqtr(), # then to yearqtr (for some reason doing this in one step doesn't work)
   potgdp = as.numeric(.x$value)  # reformat "value" column to numeric
 ))
+
+## Overwrite potgdp column of h.macro using new_potgdp
+df2 <- new_potgdp
+df1 <- h.macro
+# This function takes two data frames: df1, which contains the main data,
+# and df2, which contains the new data. Both dfs must contain a yq column. For every
+# yq entry in df2, there should be a yq entry in df1. However, the reverse does not
+# have to be true. Both should have a common column name, "colname". This function will 
+# overwrite the colname data from df1 using the data from df2. Any entries from df2
+# that do not have a corresponding yq entry will be replaced with NA
+# TODO: entries that were once numbers should never become NAs
+# Function to join df2 (shorter df with fewer yq entries) with df1
+overwrite_by_yq <- function(df1, df2, colname) {
+  # Get the new column based on yq joining
+  new_col <- df1 %>%
+    select(yq) %>%
+    left_join(df2, by = "yq") %>%
+    pull(all_of(colname))  # Extract just the vector with title "colname"
+  
+  result <- df1 %>%
+    select(-all_of(colname)) %>% # remoce the column named "colname"
+    mutate(!!colname := new_col) # add the new column
+  
+  return(result)
+}
+
+
+# TODO: MOVE TO CALCULATE-FIM
 # Quarter-over-quarter change in potential GDP is neutral counterfactual rate 
 # of growth that we use in the FIM. Any growth in, e.g. taxes in excess of or 
 # short of that growth rate registers into the FIM.
