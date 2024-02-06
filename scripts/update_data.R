@@ -1,23 +1,25 @@
-### update-data.R ###
+### update_data.R ###
 # Lorae Stojanovic
-# LE: 2/5/2024
+# LE: 2/6/2024
 # This script updates data from XXXX.xlsx using sources from BEA, FRED, and 
 # OTHER.
 #
 # This script has 3 sections:
 # 0: CONFIGURATION
 # 1: LOAD DATA
-# 2: NEUTRAL COUNTERFACTUAL
+# 2: POTENTIAL GDP
 
 ##### 0: CONFIGURATION #####
-library("readxl") # read Excel sheets
-library("zoo") # handle year-quarter data
-library("magrittr") # use pipe operator %>%
-library("httr") # make API requests
-library("dplyr") # Manipulate data (filter, arrange, summarize, etc.)
-library("purrr") # Functional programming tools for working with lists
+# Packages
+  library("readxl") # read Excel sheets
+  library("zoo") # handle year-quarter data
+  library("magrittr") # use pipe operator %>%
+  library("httr") # make API requests
+  library("dplyr") # Manipulate data (filter, arrange, summarize, etc.)
+  library("purrr") # Functional programming tools for working with lists
 
-setwd(WD_PATH) # WD_PATH is specified in .env and loaded in init.R
+# Environment variable config
+  setwd(WD_PATH) # WD_PATH is specified in .env and loaded in init.R
 
 ##### 1: LOAD DATA #####
 ## ATTENTIOPN!!!!
