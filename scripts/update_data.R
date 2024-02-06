@@ -21,26 +21,41 @@
 # Environment variable config
   setwd(WD_PATH) # WD_PATH is specified in .env and loaded in init.R
 
+# Set current quarter. For now, I'll just make it a variable.
+  # TODO: prompt user or functionalize this script
+  current_quarter <- "2024 Q1" %>%
+    as.yearqtr(., format = "%Y Q%q")
+
 ##### 1: LOAD DATA #####
-## ATTENTIOPN!!!!
-## NEED TO RENAME BASED ON NEW mock-data.xtsx
-## ATTENTIOPN!!!!
-## Load historical data, predictions, and MPCs
-# TODO: I may want to combine these three sheets into one workbook later
-# historical <- read_xlsx(path = "mock-data.xlsx", sheet = "data")
-# forecast <- read_xlsx(path = "mock-data.xlsx", sheet = "data")
-# mpc <- read_xlsx(path = "mock-data.xlsx", sheet = "mpc")
+## Load historical and forecast versions of FIM components, macro data, and MPCs
+## TODO: Loop this
+  # FIM components
+  h.itemized <- read_xlsx(path = "mock-data.xlsx", 
+                          sheet = "h.itemized", # historical data on FIM components
+                          skip = 2) %>% # read only after row 2
+    mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
+  f.itemized <- read_xlsx(path = "mock-data.xlsx", 
+                          sheet = "f.itemized", # forecast FIM components
+                          skip = 2) %>% # read only after row 2
+    mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
+  # Macro data
+  h.macro <- read_xlsx(path = "mock-data.xlsx", 
+                       sheet = "h.macro", # historical macro data (like GDP)
+                       skip = 2) %>% # read only after row 2
+    mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
+  f.macro <- read_xlsx(path = "mock-data.xlsx", 
+                       sheet = "f.macro", # forecast macro data (like GDP)
+                       skip = 2) %>% # read only after row 2
+    mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
+  # TODO: Add MPCs later
+  # mpc <- read_xlsx(path = "mock-data.xlsx", sheet = "mpc")
 
 
-# current quarter is the last column name of historical
-# current_quarter <- tail(names(historical), 1) %>%
-#   as.yearqtr(., format = "%Y Q%q")
-
-##### 2: NEUTRAL COUNTERFACTUAL ##### 
+##### 2: POTENTIAL GDP ##### 
 # Make API request to FRED to get real potential GDP time series. For more information
 # on the API request, visit https://fred.stlouisfed.org/docs/api/fred/series_observations.html
 # For more information on the time series, visit https://fred.stlouisfed.org/series/GDPPOT
-url <- "https://api.stlouisfed.org/fred/series/observations"  # Define URL
+fred_url <- "https://api.stlouisfed.org/fred/series/observations"  # URL for API request
 params <- list(  # Define parameters
   api_key = FRED_API_KEY,  # API key is specified in .env and loaded in init.R
   file_type = "json",  # Data returned in JSON format
@@ -52,15 +67,16 @@ params <- list(  # Define parameters
   aggregation_method = "eop"  # Data returned from end of period
   # TODO: may want to add real-time period https://fred.stlouisfed.org/docs/api/fred/realtime_period.html
 ) 
-response <- GET(url, query = params) %>% # Make GET request
+response <- GET(fred_url, query = params) %>% # Make GET request
   content(., "parsed") # Parse JSON response
 # Convert the observations list in response to a data frame
-gdppot <- map_dfr(response$observations, ~ data.frame(
-  date = as.Date(.x$date),  # reformat column to date
-  value = as.numeric(.x$value)  # reformat column to numeric
+new_potgdp <- map_dfr(response$observations, ~ data.frame(
+  yq = as.Date(.x$date) %>%  # reformat "date" column to date
+    as.yearqtr(), # then to yearqtr (for some reason doing this in one step doesn't work)
+  potgdp = as.numeric(.x$value)  # reformat "value" column to numeric
 ))
 # Quarter-over-quarter change in potential GDP is neutral counterfactual rate 
 # of growth that we use in the FIM. Any growth in, e.g. taxes in excess of or 
 # short of that growth rate registers into the FIM.
-gdppot <- gdppot %>%
-  mutate(neutral_chg = (value / lag(value)))  # calculate change in gdppot
+# gdppot <- gdppot %>%
+#   mutate(neutral_chg = (value / lag(value)))  # calculate change in gdppot
