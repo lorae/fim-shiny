@@ -30,22 +30,17 @@
 ## Load historical and forecast versions of FIM components, macro data, and MPCs
 ## TODO: Loop this
   # FIM components
-  h.itemized <- read_xlsx(path = "mock-data.xlsx", 
-                          sheet = "h.itemized", # historical data on FIM components
-                          skip = 2) %>% # read only after row 2
+  # historical data on FIM components
+  h.itemized <- read_xlsx(path = "mock-data.xlsx", sheet = "h.itemized", skip = 2) %>% 
     mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
-  f.itemized <- read_xlsx(path = "mock-data.xlsx", 
-                          sheet = "f.itemized", # forecast FIM components
-                          skip = 2) %>% # read only after row 2
+  # forecast FIM components
+  f.itemized <- read_xlsx(path = "mock-data.xlsx", sheet = "f.itemized", skip = 2) %>%
     mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
-  # Macro data
-  h.macro <- read_xlsx(path = "mock-data.xlsx", 
-                       sheet = "h.macro", # historical macro data (like GDP)
-                       skip = 2) %>% # read only after row 2
+  # historical macro data (like GDP)
+  h.macro <- read_xlsx(path = "mock-data.xlsx", sheet = "h.macro", skip = 2) %>% 
     mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
-  f.macro <- read_xlsx(path = "mock-data.xlsx", 
-                       sheet = "f.macro", # forecast macro data (like GDP)
-                       skip = 2) %>% # read only after row 2
+  # forecast macro data (like GDP)
+  f.macro <- read_xlsx(path = "mock-data.xlsx", sheet = "f.macro", skip = 2) %>% 
     mutate(yq = as.yearqtr(.$yq)) # convert "yq" column to yearqtr format
   # TODO: Add MPCs later
   # mpc <- read_xlsx(path = "mock-data.xlsx", sheet = "mpc")
