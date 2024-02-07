@@ -11,6 +11,10 @@
 
 ##### 0: CONFIGURATION #####
 # Packages
+# If using for the first time, run:
+  #install.packages("Haver", repos="http://www.haver.com/r/")
+  #also be sure to add your Haver path to the .env list
+  library("Haver") 
   library("readxl") # read Excel sheets
   library("zoo") # handle year-quarter data
   library("magrittr") # use pipe operator %>%
@@ -20,6 +24,7 @@
 
 # Environment variable config
   setwd(WD_PATH) # WD_PATH is specified in .env and loaded in init.R
+  haver.path(HAVER_PATH) # HAVER_PATH is specified in .env and loaded in init.R
 
 # Set current quarter. For now, I'll just make it a variable.
   # TODO: prompt user or functionalize this script
